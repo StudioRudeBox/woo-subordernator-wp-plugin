@@ -1,14 +1,14 @@
 <?php
 /**
- * Plugin Name: Studio Rude Box WC Subordernator
- * Plugin URI: https://github.com/StudioRudeBox/wc-subordernator-wp-plugin
+ * Plugin Name: SubOrdernator for WooCommerce
+ * Plugin URI: https://github.com/StudioRudeBox/woo-subordernator-wp-plugin
  * Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
- * Version: 2.1.1
+ * Version: 2.3.0
  * Author: Studio Rude Box
  * Author URI: https://studiorudebox.nl
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: srb-subordernator
+ * Text Domain: woo-subordernator
  * Domain Path: /languages
  */
 
@@ -35,7 +35,13 @@ if(is_admin())
     
     function srb_subordernator_enqueue_plugin_css():void
     {
-        wp_enqueue_style('srb-subordernator', plugin_dir_url(__FILE__) . 'style.css');        
+        wp_enqueue_style('woo-subordernator', plugin_dir_url(__FILE__) . 'style.css');
+
+        global $typenow;
+        if ($typenow === 'shop_order')
+        {
+            wp_enqueue_script('woo-subordernator', plugin_dir_url(__FILE__) . 'woo-subordernator.js', [], '2.3.0', true);
+        }
     }
     add_action('admin_enqueue_scripts', 'srb_subordernator_enqueue_plugin_css');
   
@@ -52,9 +58,15 @@ if(is_admin())
         $current_order_id = $order->get_id();
         $selected_order_id = get_post_meta($current_order_id, SRB_POST_META_PARAM_NAME, true);
 
+        // pre-fill when arriving via the "+" create sub-order button
+        if (empty($selected_order_id) && isset($_GET['srb_parent_order_id']))
+        {
+            $selected_order_id = intval($_GET['srb_parent_order_id']);
+        }
+
         // add a section to the right column
         echo '<p class="form-field form-field-wide">';
-        echo '<label for="srb_subordernator_order_reference">' . __('Link to a parent order ID (optional):', 'srb-subordernator') . '</label>';
+        echo '<label for="srb_subordernator_order_reference">' . __('Link to a parent order ID (optional):', 'woo-subordernator') . '</label>';
 
         // display input field
         printf('<input type="number" name="srb_subordernator_order_reference" value="%s" min="0" placeholder="order ID" />',
@@ -106,9 +118,6 @@ if(is_admin())
             }
         }
         
-        // add main order column
-        $new_columns['srb_subordernator_sub_order'] = __('Connected order', 'srb-subordernator');
-       
         return $new_columns;
     }
     add_filter('manage_edit-shop_order_columns', 'srb_subordernator_add_custom_columns_head', 20);
@@ -134,33 +143,16 @@ if(is_admin())
         if($column === "srb_subordernator_order_id")
         {
             echo $post_id;
+            printf('<span class="srb-order-meta" data-order-id="%d" data-parent-id="%s" style="display:none"></span>',
+                $post_id,
+                esc_attr($main_order_id)
+            );
         }
 
-        // add icon to main and sub orders
-        if($column === "order_number")
+        // add icon and parent info to order number column
+        if($column === "order_number" && $is_suborder)
         {
-            if($is_suborder)
-            {
-                echo "&emsp;➡️ ";
-            }
-            else
-            {
-                echo "📦 ";
-            }
-        }
-        
-        // add sub order info in custom column
-        if($is_suborder && $column === "srb_subordernator_sub_order")
-        {
-            $main_order = wc_get_order($main_order_id);
-            if ($main_order)
-            {
-                printf('<mark class="order-status"><a class="srb-subordernator-btn" href="%s" title="%s">%s</a></mark>',
-                    get_edit_post_link($main_order_id),
-                    __('Open the parent orders', 'srb-subordernator'),
-                    "#" . $main_order->get_order_number()
-                );
-            }     
+            echo "↳ ";
         }
     }
     add_action('manage_shop_order_posts_custom_column', 'srb_subordernator_add_custom_columns_content', 10, 2);
@@ -178,12 +170,12 @@ if(is_admin())
         {
             $selected = isset($_GET['main_sub_order_filter']) ? $_GET['main_sub_order_filter'] : '';
             $options = [
-                'main' => __('Main orders', 'srb-subordernator'),
-                'sub' => __('Sub orders', 'srb-subordernator')
+                'main' => __('Main orders', 'woo-subordernator'),
+                'sub' => __('Sub orders', 'woo-subordernator')
             ];            
 
             echo '<select name="main_sub_order_filter">';
-            echo '<option value="" ' . selected($selected, '', false) . '>' . __('All orders', 'srb-subordernator') . '</option>';
+            echo '<option value="" ' . selected($selected, '', false) . '>' . __('All orders', 'woo-subordernator') . '</option>';
             
             foreach ($options as $key => $label)
             {
@@ -252,5 +244,84 @@ if(is_admin())
             $query->set('meta_query', $meta_query);
         }
     }
-    add_action('pre_get_posts', 'srb_subordernator_filter_query');  
+    add_action('pre_get_posts', 'srb_subordernator_filter_query');
+
+    /**
+     * Add a "+" action button to each order row to create a linked sub-order
+     *
+     * @param array    $actions  Existing order actions
+     * @param WC_Order $order    Current order object
+     * @return array
+     */
+
+    function srb_subordernator_add_create_suborder_action($actions, $order): array
+    {
+        $parent_id = get_post_meta($order->get_id(), SRB_POST_META_PARAM_NAME, true);
+        if (is_numeric($parent_id))
+        {
+            return $actions;
+        }
+
+        $url = admin_url('post-new.php?post_type=shop_order&srb_parent_order_id=' . $order->get_id());
+        $actions['srb_create_suborder'] = [
+            'url'    => esc_url($url),
+            'name'   => __('Create sub-order', 'woo-subordernator'),
+            'action' => 'srb-create-suborder',
+        ];
+        return $actions;
+    }
+    add_filter('woocommerce_admin_order_actions', 'srb_subordernator_add_create_suborder_action', 10, 2);
+
+    /**
+     * Sort sub-orders directly under their parent order in the order list (server-side).
+     * Avoids JS-based row reordering and the layout shift it causes.
+     *
+     * @param array    $clauses  SQL clauses
+     * @param WP_Query $query    Current query
+     * @return array
+     */
+
+    function srb_subordernator_order_clauses($clauses, $query): array
+    {
+        global $wpdb;
+
+        if (!$query->is_main_query()) return $clauses;
+        if ($query->get('post_type') !== 'shop_order') return $clauses;
+        if (isset($_GET['orderby'])) return $clauses;
+
+        $clauses['join'] .= $wpdb->prepare(
+            " LEFT JOIN {$wpdb->postmeta} srb_pm ON srb_pm.post_id = {$wpdb->posts}.ID AND srb_pm.meta_key = %s AND srb_pm.meta_value != ''",
+            SRB_POST_META_PARAM_NAME
+        );
+
+        $clauses['orderby'] = "CAST(COALESCE(srb_pm.meta_value, {$wpdb->posts}.ID) AS UNSIGNED) DESC,
+            CASE WHEN srb_pm.meta_value IS NULL THEN 0 ELSE 1 END ASC,
+            {$wpdb->posts}.ID DESC";
+
+        return $clauses;
+    }
+    add_filter('posts_clauses', 'srb_subordernator_order_clauses', 10, 2);
+
+    /**
+     * Add is-suborder CSS class to sub-order rows in the order list.
+     *
+     * @param array  $classes  Current row classes
+     * @param string $class    Additional class string
+     * @param int    $post_id  Post ID
+     * @return array
+     */
+
+    function srb_subordernator_row_class($classes, $class, $post_id): array
+    {
+        global $typenow;
+        if ($typenow !== 'shop_order') return $classes;
+
+        $parent_id = get_post_meta($post_id, SRB_POST_META_PARAM_NAME, true);
+        if (is_numeric($parent_id))
+        {
+            $classes[] = 'is-suborder';
+        }
+        return $classes;
+    }
+    add_filter('post_class', 'srb_subordernator_row_class', 10, 3);
 }

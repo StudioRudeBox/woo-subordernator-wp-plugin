@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
 /*
-Plugin Name: Studio Rude Box WC Subordernator
+Plugin Name: SubOrdernator for WooCommerce
 Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
-Version: 2.1.1
+Version: 2.3.0
 Author: Studio Rude Box
 Author URI: https://studiorudebox.nl
 */
@@ -12,19 +12,40 @@ Author URI: https://studiorudebox.nl
     width: 1.5rem;
 }
 
-.order-status a.srb-subordernator-btn {
-    display: inline-block;
-    padding: 0 1em;
-    overflow: hidden;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    color: #7f7f7f;
+
+/* Create sub-order action button */
+.button.wc-action-button.wc-action-button-srb-create-suborder::after {
+    content: '+';
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+}
+.wc-action-button-srb-create-suborder {
+    background-color: #d4edda !important;
 }
 
-.order-status:hover {
-    background: #40403f;
+/* Hide sub-order rows on load; JS restores visibility based on sessionStorage */
+tr.srb-is-suborder {
+    display: none;
 }
 
-.order-status:hover a.srb-subordernator-btn {
-    color: #e5e5e5;
+/* Sub-order row indentation */
+.post-type-shop_order .wp-list-table tbody tr.is-suborder td.order_number {
+    padding: 1em 1em 1em 4em;
 }
+
+/* Collapse toggle button on main order rows */
+.srb-collapse-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    opacity: 0.5;
+    padding: 0 4px 0 0;
+    vertical-align: middle;
+    padding: 1em;
+}
+.srb-collapse-toggle:hover {
+    opacity: 1;
+}
+
