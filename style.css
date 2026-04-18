@@ -3,7 +3,7 @@
 /*
 Plugin Name: SubOrdernator for WooCommerce
 Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
-Version: 2.3.0
+Version: 2.3.1
 Author: Studio Rude Box
 Author URI: https://studiorudebox.nl
 */
@@ -11,7 +11,6 @@ Author URI: https://studiorudebox.nl
 #srb_subordernator_order_id {
     width: 1.5rem;
 }
-
 
 /* Create sub-order action button */
 .button.wc-action-button.wc-action-button-srb-create-suborder::after {
@@ -43,7 +42,7 @@ tr.srb-is-suborder {
     opacity: 0.5;
     padding: 0 4px 0 0;
     vertical-align: middle;
-    padding: 1em;
+    padding: 1em 1em 1em 0;
 }
 .srb-collapse-toggle:hover {
     opacity: 1;

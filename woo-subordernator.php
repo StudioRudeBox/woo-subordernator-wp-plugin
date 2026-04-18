@@ -3,7 +3,7 @@
  * Plugin Name: SubOrdernator for WooCommerce
  * Plugin URI: https://github.com/StudioRudeBox/woo-subordernator-wp-plugin
  * Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
- * Version: 2.3.0
+ * Version: 2.3.1
  * Author: Studio Rude Box
  * Author URI: https://studiorudebox.nl
  * License: GPLv2 or later
@@ -40,7 +40,7 @@ if(is_admin())
         global $typenow;
         if ($typenow === 'shop_order')
         {
-            wp_enqueue_script('woo-subordernator', plugin_dir_url(__FILE__) . 'woo-subordernator.js', [], '2.3.0', true);
+            wp_enqueue_script('woo-subordernator', plugin_dir_url(__FILE__) . 'woo-subordernator.js', [], '2.3.1', true);
         }
     }
     add_action('admin_enqueue_scripts', 'srb_subordernator_enqueue_plugin_css');
@@ -257,7 +257,7 @@ if(is_admin())
     function srb_subordernator_add_create_suborder_action($actions, $order): array
     {
         $parent_id = get_post_meta($order->get_id(), SRB_POST_META_PARAM_NAME, true);
-        if (is_numeric($parent_id))
+        if (is_numeric($parent_id) || $order->get_status() === 'completed')
         {
             return $actions;
         }
