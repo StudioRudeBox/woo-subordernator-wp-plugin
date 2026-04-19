@@ -1,2 +1,6 @@
+.claude/
 .claude/settings.local.json
 CLAUDE.md
+vendor/
+node_modules/
+build/

@@ -28,9 +28,19 @@ tr.srb-is-suborder {
     display: none;
 }
 
+/* Neutralize WP's nth-child alternating so our stripe classes control the color */
+.post-type-shop_order .wp-list-table tbody tr td,
+.post-type-shop_order .wp-list-table tbody tr th {
+    background-color: #fff;
+}
+.post-type-shop_order .wp-list-table tbody tr.srb-stripe-1 td,
+.post-type-shop_order .wp-list-table tbody tr.srb-stripe-1 th {
+    background-color: #f6f7f7;
+}
+
 /* Sub-order row indentation */
 .post-type-shop_order .wp-list-table tbody tr.is-suborder td.order_number {
-    padding: 1em 1em 1em 4em;
+    padding: 1em 1em 1em 2em;
 }
 
 /* Collapse toggle button on main order rows */

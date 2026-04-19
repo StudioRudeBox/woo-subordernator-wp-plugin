@@ -1,0 +1,20 @@
+{
+    "name": "studiorudebox/woo-subordernator",
+    "description": "Add parent-child order relationships to WooCommerce.",
+    "version": "2.3.1",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Studio Rude Box",
+            "email": "ruud@studiorudebox.nl",
+            "homepage": "https://studiorudebox.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "StudioRudeBox\\SubOrdernator\\": "src/"
+        }
+    },
+    "require": {}
+}

@@ -16,10 +16,10 @@ It's ideal for workflows where:
 
 - Add a **parent order ID field** to any order in the WooCommerce Admin to link it as a suborder.
 - **ID column** in the order list for quick reference.
-- **Order type indicators** — 📦 for main orders, ↳ for suborders — shown directly in the order number column.
+- **↳ indicator** on suborders shown directly in the order number column.
 - **Filter dropdown** above the order list to show all orders, main orders only, or suborders only.
 - **+ action button** on main orders to instantly create a linked suborder with the parent pre-filled.
-- **Server-side sorting** — suborders always appear directly beneath their parent order, no client-side reordering.
+- **Server-side sorting** — suborders always appear directly beneath their parent order.
 - **Collapse/expand toggle** on main order rows to show or hide their suborders. State is remembered per browser session.
 
 ## How it works
@@ -40,24 +40,37 @@ In the order overview:
 
 - WordPress 5.0+
 - WooCommerce 4.0+
+- PHP 8.1+ (constructor property promotion, named arguments)
+- [Composer](https://getcomposer.org/) (to generate the autoloader)
 - WooCommerce HPOS (High-Performance Order Storage) must be **disabled** — the plugin uses legacy CPT-based order storage.
 - Admin access to WooCommerce orders
+
+## Installation
+
+1. Clone or download the plugin folder to `/wp-content/plugins/woo-subordernator/`.
+2. Run `composer install` inside the plugin folder to generate the autoloader.
+3. Activate the plugin via the Plugins menu in WP Admin.
+4. Go to WooCommerce > Orders to start linking.
+
+## Development
+
+```bash
+composer install        # generate autoloader
+npm install             # install build tools
+npm run makemo          # compile .po → .mo translation files
+npm run zip             # package plugin into build/woo-subordernator-x.x.x.zip
+npm run build           # composer install (no-dev) + zip
+```
 
 ## Plugin Info
 
 - **Plugin Name:** SubOrdernator for WooCommerce
-- **Version:** 2.3.0
+- **Version:** 2.3.1
 - **Author:** Studio Rude Box
 - **License:** GPL-2.0-or-later
 - **Repository:** [woo-subordernator-wp-plugin](https://github.com/StudioRudeBox/woo-subordernator-wp-plugin)
 
-## Installation
-
-1. Upload the plugin folder to `/wp-content/plugins/`.
-2. Activate the plugin via the Plugins menu in WP Admin.
-3. Done! Go to WooCommerce > Orders to start linking.
-
 ## Feedback or Feature Requests?
 
 This plugin is developed by [Studio Rude Box](https://studiorudebox.nl).  
-We welcome feedback and ideas! Feel free to open an issue on [GitHub](https://github.com/StudioRudeBox/woo-subordernator-wp-plugin) or contact us directly.
+Feel free to open an issue on [GitHub](https://github.com/StudioRudeBox/woo-subordernator-wp-plugin) or contact us directly.
