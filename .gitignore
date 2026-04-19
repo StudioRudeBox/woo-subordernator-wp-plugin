@@ -1,6 +1,7 @@
 .claude/
 .claude/settings.local.json
 CLAUDE.md
+RELEASE.md
 vendor/
 node_modules/
 build/

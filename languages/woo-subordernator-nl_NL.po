@@ -9,9 +9,6 @@ msgstr ""
 "Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Link to a parent order ID (optional):"
-msgstr "Koppel een hoofd-bestelling op ID (optioneel):"
-
 msgid "All orders"
 msgstr "Alle bestellingen"
 
@@ -20,6 +17,33 @@ msgstr "Hoofd-bestellingen"
 
 msgid "Sub orders"
 msgstr "Sub-bestellingen"
+
+msgid "Main order"
+msgstr "Hoofd-bestelling"
+
+msgid "Sub-order of %s"
+msgstr "Sub-bestelling van %s"
+
+msgid "Parent order"
+msgstr "Bovenliggende bestelling"
+
+msgid "Connected to:"
+msgstr "Verbonden met:"
+
+msgid "Edit"
+msgstr "Bewerken"
+
+msgid "Remove"
+msgstr "Verwijderen"
+
+msgid "+ Connect parent order"
+msgstr "+ Hoofd-bestelling koppelen"
+
+msgid "Search by order ID or order #"
+msgstr "Zoeken op bestelling-ID of bestelnummer"
+
+msgid "Cancel"
+msgstr "Annuleren"
 
 msgid "Create sub-order"
 msgstr "Maak sub-bestelling"

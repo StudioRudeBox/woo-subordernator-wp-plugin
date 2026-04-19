@@ -10,8 +10,9 @@ use StudioRudeBox\SubOrdernator\Admin\OrderSorting;
 
 class Plugin {
 
-    const META_KEY = 'srb_subordernator_order_reference';
-    const VERSION  = '2.3.1';
+    const META_KEY        = 'srb_subordernator_order_reference';
+    const VERSION         = '2.3.1';
+    const LOCKED_STATUSES = [ 'completed', 'failed', 'cancelled', 'refunded' ];
 
     private string $url;
 
@@ -25,9 +26,9 @@ class Plugin {
         }
 
         ( new Assets( $this->url, self::VERSION ) )->register();
-        ( new OrderMetaBox( self::META_KEY ) )->register();
+        ( new OrderMetaBox( self::META_KEY, self::LOCKED_STATUSES ) )->register();
         ( new OrderColumns( self::META_KEY ) )->register();
         ( new OrderFilter( self::META_KEY ) )->register();
-        ( new OrderSorting( self::META_KEY ) )->register();
+        ( new OrderSorting( self::META_KEY, self::LOCKED_STATUSES ) )->register();
     }
 }

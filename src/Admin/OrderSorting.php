@@ -4,7 +4,7 @@ namespace StudioRudeBox\SubOrdernator\Admin;
 
 class OrderSorting {
 
-    public function __construct( private string $meta_key ) {}
+    public function __construct( private string $meta_key, private array $locked_statuses ) {}
 
     public function register(): void {
         add_filter( 'woocommerce_admin_order_actions', [ $this, 'add_create_suborder_action' ], 10, 2 );
@@ -14,7 +14,7 @@ class OrderSorting {
 
     public function add_create_suborder_action( array $actions, \WC_Order $order ): array {
         $parent_id = get_post_meta( $order->get_id(), $this->meta_key, true );
-        if ( is_numeric( $parent_id ) || $order->get_status() === 'completed' ) {
+        if ( is_numeric( $parent_id ) || in_array( $order->get_status(), $this->locked_statuses, true ) ) {
             return $actions;
         }
 
@@ -46,7 +46,7 @@ class OrderSorting {
         return $clauses;
     }
 
-    public function row_class( array $classes, string $class, int $post_id ): array {
+    public function row_class( array $classes, array|string $class, int $post_id ): array {
         global $typenow;
         if ( $typenow !== 'shop_order' ) return $classes;
 

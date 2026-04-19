@@ -9,9 +9,6 @@ msgstr ""
 "Language: \n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-msgid "Link to a parent order ID (optional):"
-msgstr ""
-
 msgid "All orders"
 msgstr ""
 
@@ -19,6 +16,33 @@ msgid "Main orders"
 msgstr ""
 
 msgid "Sub orders"
+msgstr ""
+
+msgid "Main order"
+msgstr ""
+
+msgid "Sub-order of %s"
+msgstr ""
+
+msgid "Parent order"
+msgstr ""
+
+msgid "Connected to:"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Remove"
+msgstr ""
+
+msgid "+ Connect parent order"
+msgstr ""
+
+msgid "Search by order ID or order #"
+msgstr ""
+
+msgid "Cancel"
 msgstr ""
 
 msgid "Create sub-order"

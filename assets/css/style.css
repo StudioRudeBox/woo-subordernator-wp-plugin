@@ -1,7 +1,7 @@
 @charset "UTF-8";
 
 /*
-Plugin Name: SubOrdernator for WooCommerce
+Plugin Name: WooCommerce SubOrdernator
 Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
 Version: 2.3.1
 Author: Studio Rude Box
@@ -58,3 +58,117 @@ tr.srb-is-suborder {
     opacity: 1;
 }
 
+/* ── Order edit page ─────────────────────────────────────────── */
+
+/* Status badge injected via CSS ::after on the order data metabox heading */
+.srb-main-order .woocommerce-order-data__heading::after,
+.srb-sub-order .woocommerce-order-data__heading::after {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: 10px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+.srb-main-order .woocommerce-order-data__heading::after {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #a5d6a7;
+}
+.srb-sub-order .woocommerce-order-data__heading::after {
+    background: #e3f2fd;
+    color: #1565c0;
+    border: 1px solid #90caf9;
+}
+
+/* Connection field */
+.srb-connection-field {
+    padding-top: 4px !important;
+}
+.srb-connection-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+.srb-connection-field #srb-parent-link {
+    margin-right: 8px;
+    font-weight: 600;
+}
+.srb-connection-field .button {
+    margin-right: 4px;
+}
+#srb-btn-remove {
+    color: #b32d2e !important;
+    border-color: #b32d2e !important;
+}
+#srb-btn-remove:hover {
+    background: #b32d2e !important;
+    color: #fff !important;
+}
+
+/* Sub-orders list on main order edit page */
+.srb-suborders-field {
+    padding-top: 4px !important;
+}
+.srb-suborders-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+.srb-suborder-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.srb-suborder-list li {
+    margin-bottom: 4px;
+}
+.srb-suborder-list a {
+    font-weight: 600;
+}
+
+/* Inline search panel */
+#srb-search-input {
+    width: 100%;
+    margin: 6px 0px;
+    padding: 6px 8px;
+    border: 1px solid #8c8f94;
+    border-radius: 3px;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+#srb-search-results {
+    list-style: none;
+    margin: 0 0 8px;
+    padding: 0;
+    border: 1px solid #dcdcde;
+    border-radius: 3px;
+    max-height: 180px;
+    overflow-y: auto;
+    background: #fff;
+}
+#srb-search-results:empty {
+    display: none;
+}
+#srb-search-results li {
+    padding: 7px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f1;
+    font-size: 13px;
+    line-height: 1.4;
+}
+#srb-search-results li:last-child {
+    border-bottom: none;
+}
+#srb-search-results li:hover {
+    background: #f0f6fc;
+}
+#srb-search-results li.srb-no-results,
+#srb-search-results li.srb-loading {
+    color: #646970;
+    cursor: default;
+    font-style: italic;
+}
