@@ -1,7 +1,18 @@
+# CLAUDE
 .claude/
 .claude/settings.local.json
+
+# BUILD
+.backlog/
 CLAUDE.md
 RELEASE.md
+build/
+
+# NODE
 vendor/
 node_modules/
-build/
+
+# TESTING
+phpunit.xml
+tests/
+.phpunit.result.cache

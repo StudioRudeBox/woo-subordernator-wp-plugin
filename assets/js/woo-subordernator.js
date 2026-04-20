@@ -100,6 +100,29 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // ── Disconnect sub-order buttons (order edit page, main order view) ──
+    var disconnectNonceEl = document.querySelector('.srb-disconnect-nonce');
+    if (disconnectNonceEl) {
+        document.querySelectorAll('.srb-btn-disconnect').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var subOrderId = btn.getAttribute('data-sub-order-id');
+                if (!confirm('Are you sure you want to disconnect this sub-order? It will become a main order.')) return;
+                var body = new URLSearchParams({
+                    action: 'srb_disconnect_suborder',
+                    sub_order_id: subOrderId,
+                    nonce: disconnectNonceEl.value
+                });
+                fetch(ajaxurl, { method: 'POST', body: body })
+                    .then(function (r) { return r.json(); })
+                    .then(function (data) {
+                        if (data.success) {
+                            btn.closest('li').remove();
+                        }
+                    });
+            });
+        });
+    }
+
     // ── Order edit page ───────────────────────────────────────────
     var nonceEl        = document.getElementById('srb-nonce');
     var currentOrderEl = document.getElementById('srb-current-order-id');
@@ -144,6 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if(removeBtn) {
         removeBtn.addEventListener('click', function () {
+            if (!confirm('Are you sure you want to remove the parent order connection?')) return;
             hiddenInput.value = '';
             connectedState.style.display = 'none';
             addState.style.display = 'inline';

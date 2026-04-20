@@ -11,6 +11,7 @@ class OrderMetaBox {
         add_action( 'woocommerce_process_shop_order_meta', [ $this, 'save_field' ] );
         add_filter( 'postbox_classes_shop_order_woocommerce-order-data', [ $this, 'metabox_classes' ] );
         add_action( 'wp_ajax_srb_search_orders', [ $this, 'search_orders_ajax' ] );
+        add_action( 'wp_ajax_srb_disconnect_suborder', [ $this, 'disconnect_suborder_ajax' ] );
     }
 
     public function metabox_classes( array $classes ): array {
@@ -65,8 +66,10 @@ class OrderMetaBox {
         if ( ! $is_suborder && $has_suborders ) :
         ?>
 
+        <input type="hidden" class="srb-disconnect-nonce" value="<?php echo esc_attr( wp_create_nonce( 'srb_disconnect_suborder' ) ); ?>">
+
         <p class="form-field form-field-wide srb-suborders-field">
-            <label><?php esc_html_e( 'Sub orders', 'woo-subordernator' ); ?></label>
+            <h3><?php esc_html_e( 'Sub orders', 'woo-subordernator' ); ?></h3>
             <ul class="srb-suborder-list">
                 <?php foreach ( $suborders as $sub ) :
                     $sub_id     = $sub->get_id();
@@ -79,30 +82,32 @@ class OrderMetaBox {
                     <a href="<?php echo esc_url( $sub_url ); ?>" target="_blank">
                         <?php echo esc_html( $sub_display . ' (' . $sub_status . ')' ); ?>
                     </a>
+                    <?php if ( ! $is_locked ) : ?>
+                    <button type="button" class="button button-small srb-btn-disconnect" data-sub-order-id="<?php echo esc_attr( $sub_id ); ?>"><?php esc_html_e( 'Disconnect', 'woo-subordernator' ); ?></button>
+                    <?php endif; ?>
                 </li>
                 <?php endforeach; ?>
             </ul>
+            <?php if ( ! $is_locked ) : ?>
+            <a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=shop_order&srb_parent_order_id=' . $current_order_id ) ); ?>" class="button srb-btn-create-suborder"><?php esc_html_e( '+ Add sub-order', 'woo-subordernator' ); ?></a>
+            <?php endif; ?>
         </p>
 
-        <?php else : ?>
+        <?php elseif ( $is_suborder ) : ?>
 
         <input type="hidden" id="srb-nonce" value="<?php echo esc_attr( wp_create_nonce( 'srb_search_orders' ) ); ?>">
         <input type="hidden" id="srb-current-order-id" value="<?php echo esc_attr( $current_order_id ); ?>">
 
         <?php if ( ! $is_locked ) : ?>
         <p class="form-field form-field-wide srb-connection-field">
-            <label><?php esc_html_e( 'Parent order', 'woo-subordernator' ); ?></label>
+            <h3><?php esc_html_e( 'Parent order', 'woo-subordernator' ); ?></h3>
 
-            <span id="srb-connected-state"<?php echo $is_suborder ? '' : ' style="display:none"'; ?>>
+            <span id="srb-connected-state">
                 <a id="srb-parent-link" href="<?php echo esc_url( $parent_edit_url ); ?>" target="_blank">
                     <?php echo esc_html( $parent_display ); ?>
                 </a>
                 <button type="button" class="button button-small" id="srb-btn-edit"><?php esc_html_e( 'Edit', 'woo-subordernator' ); ?></button>
                 <button type="button" class="button button-small" id="srb-btn-remove"><?php esc_html_e( 'Remove', 'woo-subordernator' ); ?></button>
-            </span>
-
-            <span id="srb-add-state"<?php echo $is_suborder ? ' style="display:none"' : ''; ?>>
-                <button type="button" class="button" id="srb-btn-add"><?php esc_html_e( '+ Connect parent order', 'woo-subordernator' ); ?></button>
             </span>
 
             <input type="hidden" name="<?php echo esc_attr( $this->meta_key ); ?>" id="srb-parent-id-input" value="<?php echo esc_attr( $selected_order_id ); ?>">
@@ -112,6 +117,14 @@ class OrderMetaBox {
                 <ul id="srb-search-results"></ul>
                 <button type="button" class="button" id="srb-btn-cancel"><?php esc_html_e( 'Cancel', 'woo-subordernator' ); ?></button>
             </div>
+        </p>
+        <?php endif; ?>
+
+        <?php else : ?>
+
+        <?php if ( ! $is_locked && $current_order_id ) : ?>
+        <p class="form-field form-field-wide srb-suborders-field">
+            <a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=shop_order&srb_parent_order_id=' . $current_order_id ) ); ?>" class="button srb-btn-create-suborder"><?php esc_html_e( '+ Add sub-order', 'woo-subordernator' ); ?></a>
         </p>
         <?php endif; ?>
 
@@ -200,5 +213,23 @@ class OrderMetaBox {
         }
 
         wp_send_json_success( $results );
+    }
+
+    public function disconnect_suborder_ajax(): void {
+        if ( ! check_ajax_referer( 'srb_disconnect_suborder', 'nonce', false ) ) {
+            wp_send_json_error( 'Invalid nonce', 403 );
+            return;
+        }
+        if ( ! current_user_can( 'edit_shop_orders' ) ) {
+            wp_send_json_error( 'Forbidden', 403 );
+            return;
+        }
+        $sub_order_id = intval( $_POST['sub_order_id'] ?? 0 );
+        if ( ! $sub_order_id ) {
+            wp_send_json_error( 'Invalid order ID', 400 );
+            return;
+        }
+        delete_post_meta( $sub_order_id, $this->meta_key );
+        wp_send_json_success();
     }
 }

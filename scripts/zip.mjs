@@ -14,18 +14,31 @@ archive.pipe( output );
 archive.glob( '**/*', {
     cwd: '.',
     ignore: [
+        // general
         '.git/**',
-        '.claude/**',
-        'node_modules/**',
-        'build/**',
         'scripts/**',
-        '**/.DS_Store',
+        '**/.DS_Store',        
+        
+        // node
+        'node_modules/**',
         'vendor/**',
-        'CLAUDE.md',
+
+        // build
         'composer.json',
         'composer.lock',
         'package.json',
         'package-lock.json',
+        'build/**',
+        
+        // claude
+        '.claude/**',
+        'CLAUDE.md',
+        'RELEASE.md',
+        
+        // tests     
+        'tests/**',        
+        '.phpunit.result.cache',        
+        'phpunit.xml',
     ],
 } );
 

@@ -88,19 +88,52 @@ tr.srb-is-suborder {
 .srb-connection-field {
     padding-top: 4px !important;
 }
-.srb-connection-field label {
-    display: block;
+.srb-connection-field h3 {
     margin-bottom: 6px;
-    font-weight: 600;
 }
 .srb-connection-field #srb-parent-link {
     margin-right: 8px;
-    font-weight: 600;
+}
+#srb-connected-state {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 4px;
 }
 .srb-connection-field .button {
-    margin-right: 4px;
+    margin-right: 0;
+}
+#srb-btn-edit {
+    position: relative;
+    font-size: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+}
+#srb-btn-edit::before {
+    font-family: Dashicons;
+    speak: never;
+    font-size: 18px;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 24px;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    content: "\f464";
 }
 #srb-btn-remove {
+    position: relative;
+    font-size: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
     color: #b32d2e !important;
     border-color: #b32d2e !important;
 }
@@ -124,10 +157,53 @@ tr.srb-is-suborder {
     list-style: none;
 }
 .srb-suborder-list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 4px;
     margin-bottom: 4px;
 }
-.srb-suborder-list a {
-    font-weight: 600;
+
+/* Disconnect button in sub-orders list */
+.srb-btn-disconnect {
+    position: relative;
+    font-size: 0 !important;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    color: #b32d2e !important;
+    border-color: #b32d2e !important;
+}
+.srb-btn-disconnect:hover {
+    background: #b32d2e !important;
+    color: #fff !important;
+}
+.srb-btn-disconnect::before,
+#srb-btn-remove::before {
+    font-family: Dashicons;
+    speak: never;
+    font-size: 18px;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    margin: 0;
+    text-indent: 0;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    content: "\f158";
+}
+
+/* Add sub-order button on order edit page */
+.srb-btn-create-suborder {
+    margin-top: 6px !important;
+    display: inline-block !important;
 }
 
 /* Inline search panel */

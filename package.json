@@ -9,7 +9,8 @@
     "scripts": {
         "build": "node scripts/zip.mjs",
         "zip": "node scripts/zip.mjs",
-        "makemo": "node scripts/compile-mo.mjs"
+        "makemo": "node scripts/compile-mo.mjs",
+        "test": "php vendor/bin/phpunit"
     },
     "devDependencies": {
         "archiver": "^7.0.0",
