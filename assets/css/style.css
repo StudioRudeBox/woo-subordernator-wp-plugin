@@ -112,7 +112,6 @@ tr.srb-is-suborder {
 }
 #srb-btn-edit::before {
     font-family: Dashicons;
-    speak: never;
     font-size: 18px;
     font-weight: 400;
     font-variant: normal;
@@ -181,7 +180,6 @@ tr.srb-is-suborder {
 .srb-btn-disconnect::before,
 #srb-btn-remove::before {
     font-family: Dashicons;
-    speak: never;
     font-size: 18px;
     font-weight: 400;
     font-variant: normal;
@@ -247,4 +245,16 @@ tr.srb-is-suborder {
     color: #646970;
     cursor: default;
     font-style: italic;
+}
+
+/* ── Order list grouping ─────────────────────────────────────── */
+
+/* Bottom border separating the last sub-order from the next main order */
+tr.srb-last-suborder > td {
+    border-bottom: 1px solid #c3c4c7;
+}
+
+/* Fine shadow on main order row when its sub-orders are visible */
+tr.srb-has-children:not(.srb-collapsed) > td {
+    box-shadow: 0 -4px 8px -2px rgba(0, 0, 0, 0.08);
 }

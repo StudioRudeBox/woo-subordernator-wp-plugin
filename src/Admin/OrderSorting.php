@@ -47,11 +47,32 @@ class OrderSorting {
     }
 
     public function row_class( array $classes, array|string $class, int $post_id ): array {
-        global $typenow;
+        global $typenow, $wpdb;
         if ( $typenow !== 'shop_order' ) return $classes;
 
-        static $main_order_index = 0;
-        static $stripe_map = [];
+        static $main_order_index   = 0;
+        static $stripe_map         = [];
+        static $has_children       = null; // [ parent_id => true ]
+        static $last_child_of      = null; // [ parent_id => min_child_id ]
+
+        if ( $has_children === null ) {
+            $has_children  = [];
+            $last_child_of = [];
+            $rows = $wpdb->get_results( $wpdb->prepare(
+                "SELECT post_id, meta_value FROM {$wpdb->postmeta}
+                  WHERE meta_key = %s AND meta_value != ''",
+                $this->meta_key
+            ) );
+            foreach ( $rows as $row ) {
+                $parent = (int) $row->meta_value;
+                $child  = (int) $row->post_id;
+                $has_children[ $parent ] = true;
+                // Sub-orders are sorted DESC by ID, so the last visible row is the lowest ID.
+                if ( ! isset( $last_child_of[ $parent ] ) || $child < $last_child_of[ $parent ] ) {
+                    $last_child_of[ $parent ] = $child;
+                }
+            }
+        }
 
         $parent_id   = get_post_meta( $post_id, $this->meta_key, true );
         $is_suborder = is_numeric( $parent_id );
@@ -59,10 +80,16 @@ class OrderSorting {
         if ( $is_suborder ) {
             $classes[] = 'is-suborder';
             $stripe    = $stripe_map[ (int) $parent_id ] ?? 0;
+            if ( ( $last_child_of[ (int) $parent_id ] ?? null ) === $post_id ) {
+                $classes[] = 'srb-last-suborder';
+            }
         } else {
             $stripe               = $main_order_index % 2;
             $stripe_map[$post_id] = $stripe;
             $main_order_index++;
+            if ( isset( $has_children[ $post_id ] ) ) {
+                $classes[] = 'srb-has-children';
+            }
         }
 
         $classes   = array_filter( $classes, fn( $c ) => $c !== 'alternate' );
