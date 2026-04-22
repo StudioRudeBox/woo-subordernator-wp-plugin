@@ -19,6 +19,9 @@ class Assets {
         global $typenow;
         if ( $typenow === 'shop_order' ) {
             wp_enqueue_script( 'woo-subordernator', $this->url . 'assets/js/woo-subordernator.js', [], $this->version, true );
+            wp_localize_script( 'woo-subordernator', 'srbSubordernator', [
+                'confirmDisconnect' => __( 'Are you sure you want to disconnect this sub-order? It will become a main order.', 'woo-subordernator' ),
+            ] );
         }
     }
 }

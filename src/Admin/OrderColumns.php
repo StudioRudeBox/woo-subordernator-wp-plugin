@@ -8,7 +8,16 @@ class OrderColumns {
 
     public function register(): void {
         add_filter( 'manage_edit-shop_order_columns', [ $this, 'add_columns_head' ], 20 );
-        add_action( 'manage_shop_order_posts_custom_column', [ $this, 'add_columns_content' ], 10, 2 );
+        add_action( 'manage_shop_order_posts_custom_column', [ $this, 'add_columns_prefix' ], 1, 2 );
+        add_action( 'manage_shop_order_posts_custom_column', [ $this, 'add_columns_content' ], 20, 2 );
+    }
+
+    public function add_columns_prefix( string $column, int $post_id ): void {
+        if ( $column !== 'order_number' ) return;
+        $parent_id = get_post_meta( $post_id, $this->meta_key, true );
+        if ( is_numeric( $parent_id ) ) {
+            echo '&#x21AA; ';
+        }
     }
 
     public function add_columns_head( array $columns ): array {
@@ -37,8 +46,5 @@ class OrderColumns {
             );
         }
 
-        if ( $column === 'order_number' && $is_suborder ) {
-            echo '↪ ';
-        }
     }
 }

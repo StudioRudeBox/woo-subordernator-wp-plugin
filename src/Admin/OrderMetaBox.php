@@ -95,30 +95,12 @@ class OrderMetaBox {
 
         <?php elseif ( $is_suborder ) : ?>
 
-        <input type="hidden" id="srb-nonce" value="<?php echo esc_attr( wp_create_nonce( 'srb_search_orders' ) ); ?>">
-        <input type="hidden" id="srb-current-order-id" value="<?php echo esc_attr( $current_order_id ); ?>">
-
-        <?php if ( ! $is_locked ) : ?>
         <p class="form-field form-field-wide srb-connection-field">
             <h3><?php esc_html_e( 'Parent order', 'woo-subordernator' ); ?></h3>
-
-            <span id="srb-connected-state">
-                <a id="srb-parent-link" href="<?php echo esc_url( $parent_edit_url ); ?>" target="_blank">
-                    <?php echo esc_html( $parent_display ); ?>
-                </a>
-                <button type="button" class="button button-small" id="srb-btn-edit"><?php esc_html_e( 'Edit', 'woo-subordernator' ); ?></button>
-                <button type="button" class="button button-small" id="srb-btn-remove"><?php esc_html_e( 'Remove', 'woo-subordernator' ); ?></button>
-            </span>
-
-            <input type="hidden" name="<?php echo esc_attr( $this->meta_key ); ?>" id="srb-parent-id-input" value="<?php echo esc_attr( $selected_order_id ); ?>">
-
-            <div id="srb-search-panel" style="display:none">
-                <input type="text" id="srb-search-input" placeholder="<?php esc_attr_e( 'Search by order ID or order #', 'woo-subordernator' ); ?>">
-                <ul id="srb-search-results"></ul>
-                <button type="button" class="button" id="srb-btn-cancel"><?php esc_html_e( 'Cancel', 'woo-subordernator' ); ?></button>
-            </div>
+            <a href="<?php echo esc_url( $parent_edit_url ); ?>" target="_blank">
+                <?php echo esc_html( $parent_display ); ?>
+            </a>
         </p>
-        <?php endif; ?>
 
         <?php else : ?>
 

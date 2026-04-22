@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Studio Rude Box WC Subordernator 2.3.1\n"
 "Report-Msgid-Bugs-To: https://github.com/StudioRudeBox/woo-subordernator-wp-plugin\n"
-"POT-Creation-Date: 2026-04-20\n"
+"POT-Creation-Date: 2026-04-22\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -27,29 +27,14 @@ msgstr "Sub-bestelling van %s"
 msgid "Parent order"
 msgstr "Bovenliggende bestelling"
 
-msgid "Connected to:"
-msgstr "Verbonden met:"
+msgid "Disconnect"
+msgstr "Ontkoppelen"
 
-msgid "Edit"
-msgstr "Bewerken"
-
-msgid "Remove"
-msgstr "Verwijderen"
-
-msgid "+ Connect parent order"
-msgstr "+ Hoofd-bestelling koppelen"
-
-msgid "Search by order ID or order #"
-msgstr "Zoeken op bestelling-ID of bestelnummer"
-
-msgid "Cancel"
-msgstr "Annuleren"
+msgid "+ Add sub-order"
+msgstr "+ Sub-bestelling toevoegen"
 
 msgid "Create sub-order"
 msgstr "Maak sub-bestelling"
 
 msgid "Are you sure you want to disconnect this sub-order? It will become a main order."
-msgstr "Weet je zeker dat je deze sub-bestelling wilt ontkoppelen? Het wordt een hoofd-bestelling."
-
-msgid "Are you sure you want to remove the parent order connection?"
-msgstr "Weet je zeker dat je de koppeling met de bovenliggende bestelling wilt verwijderen?"
+msgstr "Weet je zeker dat je deze sub-bestelling wilt ontkoppelen? Deze wordt dan een hoofd-bestelling."
