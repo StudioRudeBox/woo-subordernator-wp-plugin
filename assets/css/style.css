@@ -3,7 +3,7 @@
 /*
 Plugin Name: WooCommerce SubOrdernator
 Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
-Version: 2.3.1
+Version: 2.3.2
 Author: Studio Rude Box
 Author URI: https://studiorudebox.nl
 */
@@ -23,7 +23,7 @@ Author URI: https://studiorudebox.nl
     background-color: #d4edda !important;
 }
 
-/* Hide sub-order rows on load; JS restores visibility based on sessionStorage */
+/* Hide sub-order rows on load; JS expands them only if sessionStorage says so */
 tr.srb-is-suborder {
     display: none;
 }
@@ -45,17 +45,41 @@ tr.srb-is-suborder {
 
 /* Collapse toggle button on main order rows */
 .srb-collapse-toggle {
-    background: none;
-    border: none;
+    position: relative;
+    background: #fff;
+    border: 1px solid #8c8f94;
+    border-radius: 2px;
+    color: #50575e;
     cursor: pointer;
-    font-size: 10px;
-    opacity: 0.5;
-    padding: 0 4px 0 0;
+    font-size: 0;
+    width: 19px;
+    height: 19px;
+    padding: 0;
+    display: inline-block;
     vertical-align: middle;
-    padding: 1em 1em 1em 0;
+    margin-right: 4px;
 }
 .srb-collapse-toggle:hover {
-    opacity: 1;
+    border-color: #2271b1;
+    color: #2271b1;
+}
+.srb-collapse-toggle::before {
+    font-family: Dashicons;
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 400;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+    content: "\f460";
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+tr.srb-collapsed .srb-collapse-toggle::before {
+    content: "\f132";
 }
 
 /* ── Order edit page ─────────────────────────────────────────── */
@@ -161,5 +185,5 @@ tr.srb-last-suborder > td {
 
 /* Top border marks the start of each main-order group when sub-orders are visible */
 tr.srb-has-children:not(.srb-collapsed) > td {
-    border-top: 2px solid #c3c4c7;
+    border-top: 1px solid #c3c4c7;
 }

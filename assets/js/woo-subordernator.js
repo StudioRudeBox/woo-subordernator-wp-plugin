@@ -31,13 +31,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Show sub-order rows whose parent is not collapsed (CSS hides all by default)
+    // Show sub-order rows only if the user previously expanded them (collapsed by default)
     rows.forEach(function (tr) {
         var meta = tr.querySelector('.srb-order-meta');
         if (!meta) return;
         var parentId = meta.getAttribute('data-parent-id');
         if (!parentId) return;
-        if (sessionStorage.getItem('srb-collapsed-' + parentId) !== '1') {
+        if (sessionStorage.getItem('srb-expanded-' + parentId) === '1') {
             tr.style.display = 'table-row';
         }
     });
@@ -54,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function () {
         toggle.className = 'srb-collapse-toggle';
         toggle.setAttribute('data-order-id', orderId);
         toggle.setAttribute('aria-label', 'Toggle sub-orders');
-        toggle.textContent = '▼';
 
         // Insert toggle before the order number link
         var orderNumberCell = tr.querySelector('.order_number');
@@ -62,9 +61,11 @@ document.addEventListener('DOMContentLoaded', function () {
             orderNumberCell.insertBefore(toggle, orderNumberCell.firstChild);
         }
 
-        // Restore collapsed state
-        var storageKey = 'srb-collapsed-' + orderId;
+        // Default collapsed; restore expanded state from localStorage
+        var storageKey = 'srb-expanded-' + orderId;
         if (sessionStorage.getItem(storageKey) === '1') {
+            expand(orderId, toggle, trByOrderId, childrenMap);
+        } else {
             collapse(orderId, toggle, trByOrderId, childrenMap, false);
         }
 
@@ -72,10 +73,10 @@ document.addEventListener('DOMContentLoaded', function () {
             var isCollapsed = tr.classList.contains('srb-collapsed');
             if (isCollapsed) {
                 expand(orderId, toggle, trByOrderId, childrenMap);
-                sessionStorage.removeItem(storageKey);
+                sessionStorage.setItem(storageKey, '1');
             } else {
                 collapse(orderId, toggle, trByOrderId, childrenMap, true);
-                sessionStorage.setItem(storageKey, '1');
+                sessionStorage.removeItem(storageKey);
             }
         });
     });
@@ -83,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function collapse(parentId, toggle, trByOrderId, childrenMap, animate) {
         var parentTr = trByOrderId[parentId];
         if (parentTr) parentTr.classList.add('srb-collapsed');
-        toggle.textContent = '▶';
+        toggle.textContent = '';
         (childrenMap[parentId] || []).forEach(function (childId) {
             var childTr = trByOrderId[childId];
             if (childTr) childTr.style.display = 'none';
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function expand(parentId, toggle, trByOrderId, childrenMap) {
         var parentTr = trByOrderId[parentId];
         if (parentTr) parentTr.classList.remove('srb-collapsed');
-        toggle.textContent = '▼';
+        toggle.textContent = '';
         (childrenMap[parentId] || []).forEach(function (childId) {
             var childTr = trByOrderId[childId];
             if (childTr) childTr.style.display = 'table-row';

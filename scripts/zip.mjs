@@ -17,7 +17,8 @@ archive.glob( '**/*', {
         // general
         '.git/**',
         'scripts/**',
-        '**/.DS_Store',        
+        '**/.DS_Store',
+        'README.md',
         
         // node
         'node_modules/**',
