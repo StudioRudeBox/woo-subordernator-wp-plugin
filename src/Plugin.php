@@ -11,7 +11,6 @@ use StudioRudeBox\SubOrdernator\Admin\OrderSorting;
 class Plugin {
 
     const META_KEY        = 'srb_subordernator_order_reference';
-    const VERSION         = '2.3.2';
     const LOCKED_STATUSES = [ 'completed', 'failed', 'cancelled', 'refunded' ];
 
     private string $url;
@@ -25,7 +24,7 @@ class Plugin {
             return;
         }
 
-        ( new Assets( $this->url, self::VERSION ) )->register();
+        ( new Assets( $this->url, WSO_VERSION ) )->register();
         ( new OrderMetaBox( self::META_KEY, self::LOCKED_STATUSES ) )->register();
         ( new OrderColumns( self::META_KEY ) )->register();
         ( new OrderFilter( self::META_KEY ) )->register();

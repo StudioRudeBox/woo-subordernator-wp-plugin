@@ -1,9 +1,9 @@
-# WooCommerce SubOrdernator
+# SubOrdernator for WooCommerce
 
 **Plugin by [Studio Rude Box](https://studiorudebox.nl)**  
 Easily link WooCommerce orders together by assigning suborders to a main order — for a cleaner, more organized order management system in WP-Admin.
 
-## What is WooCommerce SubOrdernator?
+## What is SubOrdernator for WooCommerce?
 
 The **SubOrdernator** plugin adds functionality to the WordPress Admin that allows store owners to link one order to another. This creates a clear parent–child relationship between orders: a *main order* and one or more *suborders*.
 
@@ -64,7 +64,7 @@ npm run build           # composer install (no-dev) + zip
 
 ## Plugin Info
 
-- **Plugin Name:** WooCommerce SubOrdernator
+- **Plugin Name:** SubOrdernator for WooCommerce
 - **Version:** 2.3.1
 - **Author:** Studio Rude Box
 - **License:** GPL-2.0-or-later
