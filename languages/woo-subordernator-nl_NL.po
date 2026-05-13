@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Studio Rude Box WC Subordernator 2.3.1\n"
+"Project-Id-Version: Studio Rude Box WC Subordernator 2.4.1\n"
 "Report-Msgid-Bugs-To: https://github.com/StudioRudeBox/woo-subordernator-wp-plugin\n"
 "POT-Creation-Date: 2026-04-22\n"
 "MIME-Version: 1.0\n"

@@ -65,7 +65,7 @@ npm run build           # composer install (no-dev) + zip
 ## Plugin Info
 
 - **Plugin Name:** SubOrdernator for WooCommerce
-- **Version:** 2.3.1
+- **Version:** 2.4.1
 - **Author:** Studio Rude Box
 - **License:** GPL-2.0-or-later
 - **Repository:** [woo-subordernator-wp-plugin](https://github.com/StudioRudeBox/woo-subordernator-wp-plugin)

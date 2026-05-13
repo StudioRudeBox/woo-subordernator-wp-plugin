@@ -3,7 +3,7 @@
  * Plugin Name: SubOrdernator for WooCommerce
  * Plugin URI: https://github.com/StudioRudeBox/woo-subordernator-wp-plugin
  * Description: Add the ability to link a WooCommerce order to another order, creating a parent–suborder relationship.
- * Version: 2.4.0
+ * Version: 2.4.1
  * Author: Studio Rude Box
  * Author URI: https://studiorudebox.nl
  * License: GPLv2 or later
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
-define( 'WSO_VERSION', '2.4.0' );
+define( 'WSO_VERSION', '2.4.1' );
 define( 'WSO_PLUGIN_FILE', __FILE__ );
 define( 'WSO_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 

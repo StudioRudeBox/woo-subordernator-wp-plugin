@@ -2,10 +2,11 @@ import archiver from 'archiver';
 import { createWriteStream, mkdirSync, readFileSync } from 'fs';
 
 const { version } = JSON.parse( readFileSync( 'package.json', 'utf8' ) );
+const pluginSlug = 'woo-subordernator';
 
 mkdirSync( 'build', { recursive: true } );
 
-const filename = `build/woo-subordernator-${version}.zip`;
+const filename = `build/${pluginSlug}-${version}.zip`;
 const output   = createWriteStream( filename );
 const archive  = archiver( 'zip', { zlib: { level: 9 } } );
 
@@ -41,6 +42,8 @@ archive.glob( '**/*', {
         '.phpunit.result.cache',        
         'phpunit.xml',
     ],
+}, {
+    prefix: pluginSlug,
 } );
 
 output.on( 'close', () => console.log( `✓ ${filename} (${ ( archive.pointer() / 1024 ).toFixed( 1 ) } KB)` ) );

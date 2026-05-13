@@ -1,6 +1,6 @@
-# CLAUDE
+# CLAUDE / CODEX
 .claude/
-.claude/settings.local.json
+.codex/
 
 # BUILD
 .backlog/
